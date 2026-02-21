@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer | AI Women Safety System</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <i class="fas fa-shield-alt"></i>
+            <h1>SafeHer</h1>
+            <p>AI-Powered Safety Companion</p>
+            <div class="loading-bar"></div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container" id="appContainer">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>SafeHer</span>
+            </div>
+            
+            <ul class="nav-links">
+                <li class="active" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li data-page="map">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>Live Map</span>
+                </li>
+                <li data-page="contacts">
+                    <i class="fas fa-address-book"></i>
+                    <span>Emergency Contacts</span>
+                </li>
+                <li data-page="journey">
+                    <i class="fas fa-route"></i>
+                    <span>Safe Journey</span>
+                </li>
+                <li data-page="history">
+                    <i class="fas fa-history"></i>
+                    <span>Safety History</span>
+                </li>
+                <li data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </li>
+            </ul>
+
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=Sarah+Wilson&background=ff6b9d&color=fff" alt="User">
+                <div class="user-info">
+                    <span class="user-name">Sarah Wilson</span>
+                    <span class="user-status">Premium Member</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="header-left">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p class="subtitle">Welcome back, stay safe today</p>
+                </div>
+
+                <div class="header-right">
+                    <div class="safety-indicator" id="safetyIndicator">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Safe Zone</span>
+                    </div>
+                    <button class="btn-icon" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Dashboard Page -->
+                <section class="page active" id="dashboard">
+                    <div class="dashboard-grid">
+                        <!-- Safety Score Card -->
+                        <div class="card safety-score-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-shield-alt"></i> AI Safety Score</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="score-container">
+                                    <div class="circular-chart">
+                                        <svg viewBox="0 0 36 36" class="circular-chart-safety">
+                                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                            <path class="circle" stroke-dasharray="85, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                            <text x="18" y="20.35" class="percentage">85</text>
+                                        </svg>
+                                    </div>
+                                    <div class="score-details">
+                                        <h4>High Safety</h4>
+                                        <p>Based on location, time, and nearby resources</p>
+                                        <div class="score-factors">
+                                            <span class="factor good"><i class="fas fa-check"></i> Police Nearby</span>
+                                            <span class="factor good"><i class="fas fa-check"></i> Well Lit Area</span>
+                                            <span class="factor warning"><i class="fas fa-exclamation"></i> Late Night</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="card quick-actions-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                            </div>
+                            <div class="card-body">
+                                <button class="action-btn sos-btn" onclick="triggerSOS()">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <span>SOS Alert</span>
+                                </button>
+                                <button class="action-btn share-btn" onclick="shareLiveLocation()">
+                                    <i class="fas fa-share-alt"></i>
+                                    <span>Share Live</span>
+                                </button>
+                                <button class="action-btn route-btn" onclick="startSafeJourney()">
+                                    <i class="fas fa-route"></i>
+                                    <span>Safe Route</span>
+                                </button>
+                                <button class="action-btn record-btn" onclick="startRecording()">
+                                    <i class="fas fa-video"></i>
+                                    <span>Record</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Nearby Help -->
+                        <div class="card nearby-help-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-first-aid"></i> Nearby Help</h3>
+                                <button class="btn-text" onclick="refreshNearbyHelp()">Refresh</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="help-item" id="nearestPolice">
+                                    <div class="help-icon police">
+                                        <i class="fas fa-user-shield"></i>
+                                    </div>
+                                    <div class="help-info">
+                                        <h4>Police Station</h4>
+                                        <p>Central Police Station</p>
+                                        <span class="distance">1.2 km away</span>
+                                    </div>
+                                    <button class="btn-icon-sm" onclick="callEmergency('100')">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                </div>
+
+                                <div class="help-item" id="nearestHospital">
+                                    <div class="help-icon hospital">
+                                        <i class="fas fa-hospital"></i>
+                                    </div>
+                                    <div class="help-info">
+                                        <h4>Hospital</h4>
+                                        <p>City General Hospital</p>
+                                        <span class="distance">2.5 km away</span>
+                                    </div>
+                                    <button class="btn-icon-sm" onclick="callEmergency('108')">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                </div>
+
+                                <div class="help-item" id="nearestWomensHelpline">
+                                    <div class="help-icon helpline">
+                                        <i class="fas fa-phone-alt"></i>
+                                    </div>
+                                    <div class="help-info">
+                                        <h4>Women Helpline</h4>
+                                        <p>24/7 Support</p>
+                                        <span class="distance">Available 24/7</span>
+                                    </div>
+                                    <button class="btn-icon-sm" onclick="callEmergency('1091')">
+                                        <i class="fas fa-phone"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live Map Preview -->
+                        <div class="card map-preview-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-map"></i> Live Location</h3>
+                                <button class="btn-text" onclick="showFullMap()">View Full Map</button>
+                            </div>
+                            <div class="card-body no-padding">
+                                <div id="dashboardMap"></div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Alerts -->
+                        <div class="card alerts-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-bell"></i> Safety Alerts</h3>
+                                <span class="badge">3 New</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert-item warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <div class="alert-content">
+                                        <h4>Low Light Area Detected</h4>
+                                        <p>Street light outage reported on Main St</p>
+                                        <span class="time">2 hours ago</span>
+                                    </div>
+                                </div>
+                                <div class="alert-item info">
+                                    <i class="fas fa-info-circle"></i>
+                                    <div class="alert-content">
+                                        <h4>Safe Journey Completed</h4>
+                                        <p>You reached Home safely</p>
+                                        <span class="time">5 hours ago</span>
+                                    </div>
+                                </div>
+                                <div class="alert-item success">
+                                    <i class="fas fa-check-circle"></i>
+                                    <div class="alert-content">
+                                        <h4>Police Station Verified</h4>
+                                        <p>Central Station is operational 24/7</p>
+                                        <span class="time">Yesterday</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Map Page -->
+                <section class="page" id="mapPage">
+                    <div class="map-container">
+                        <div id="fullMap"></div>
+                        <div class="map-controls">
+                            <button class="map-control-btn" onclick="centerOnUser()" title="My Location">
+                                <i class="fas fa-crosshairs"></i>
+                            </button>
+                            <button class="map-control-btn" onclick="toggleTrafficLayer()" title="Traffic">
+                                <i class="fas fa-car"></i>
+                            </button>
+                            <button class="map-control-btn" onclick="showPoliceStations()" title="Police Stations">
+                                <i class="fas fa-shield-alt"></i>
+                            </button>
+                            <button class="map-control-btn" onclick="showSafeZones()" title="Safe Zones">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                        </div>
+                        <div class="route-planner">
+                            <h4><i class="fas fa-route"></i> Plan Safe Route</h4>
+                            <div class="input-group">
+                                <input type="text" id="destinationInput" placeholder="Enter destination...">
+                                <button class="btn-primary" onclick="calculateSafeRoute()">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <div class="route-options" id="routeOptions">
+                                <!-- Route options will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contacts Page -->
+                <section class="page" id="contacts">
+                    <div class="contacts-container">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-address-book"></i> Emergency Contacts</h3>
+                                <button class="btn-primary" onclick="openAddContactModal()">
+                                    <i class="fas fa-plus"></i> Add Contact
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="contacts-list" id="contactsList">
+                                    <!-- Contacts will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-users"></i> Trusted Circle</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="info-text">Your trusted circle will receive your live location and safety alerts during emergencies.</p>
+                                <div class="trusted-members" id="trustedMembers">
+                                    <!-- Trusted members will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Journey Page -->
+                <section class="page" id="journey">
+                    <div class="journey-container">
+                        <div class="card journey-tracker-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-route"></i> Safe Journey Tracker</h3>
+                                <div class="journey-status" id="journeyStatus">
+                                    <span class="status-dot inactive"></span>
+                                    <span>Inactive</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="journey-inputs">
+                                    <div class="input-field">
+                                        <label>From</label>
+                                        <input type="text" id="journeyFrom" placeholder="Current Location" readonly>
+                                    </div>
+                                    <div class="input-field">
+                                        <label>To</label>
+                                        <input type="text" id="journeyTo" placeholder="Enter destination">
+                                    </div>
+                                    <div class="input-field">
+                                        <label>Estimated Arrival</label>
+                                        <input type="datetime-local" id="journeyETA">
+                                    </div>
+                                </div>
+                                <button class="btn-primary btn-block" id="startJourneyBtn" onclick="toggleJourney()">
+                                    <i class="fas fa-play"></i> Start Safe Journey
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card journey-info-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-info-circle"></i> Journey Details</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="journey-stats">
+                                    <div class="stat">
+                                        <i class="fas fa-clock"></i>
+                                        <div class="stat-info">
+                                            <span class="value" id="journeyTime">00:00</span>
+                                            <span class="label">Duration</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <i class="fas fa-road"></i>
+                                        <div class="stat-info">
+                                            <span class="value" id="journeyDistance">0 km</span>
+                                            <span class="label">Distance</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <div class="stat-info">
+                                            <span class="value" id="journeySafety">--</span>
+                                            <span class="label">Safety Score</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="checkpoints" id="checkpoints">
+                                    <h4>Safety Checkpoints</h4>
+                                    <div class="checkpoint">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>Start Point - Safe</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- History Page -->
+                <section class="page" id="history">
+                    <div class="history-container">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-history"></i> Safety History</h3>
+                                <div class="filter-group">
+                                    <select id="historyFilter">
+                                        <option value="all">All Time</option>
+                                        <option value="week">This Week</option>
+                                        <option value="month">This Month</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="history-list" id="historyList">
+                                    <!-- History items will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Page -->
+                               <!-- Settings Page -->
+                <section class="page" id="settings">
+                    <div class="settings-container">
+                        <div class="settings-group">
+                            <h3><i class="fas fa-bell"></i> Notification Settings</h3>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Emergency Alerts</h4>
+                                    <p>Receive alerts about nearby emergencies</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Check-in Reminders</h4>
+                                    <p>Remind me to check in during journeys</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Sound Alerts</h4>
+                                    <p>Play sound for SOS and alerts</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <h3><i class="fas fa-shield-alt"></i> Safety Features</h3>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Auto SOS</h4>
+                                    <p>Automatically send SOS if movement stops during active journey</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Background Tracking</h4>
+                                    <p>Continue tracking location when app is minimized</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Fake PIN</h4>
+                                    <p>Show fake PIN screen when entering app under duress</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <h3><i class="fas fa-user"></i> Account</h3>
+                            <div class="setting-item clickable" onclick="openChangePasswordModal()">
+                                <div class="setting-info">
+                                    <h4>Change Password</h4>
+                                    <p>Update your account password</p>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="setting-item clickable" onclick="openPrivacyPolicy()">
+                                <div class="setting-info">
+                                    <h4>Privacy Policy</h4>
+                                    <p>View how we protect your data</p>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="setting-item clickable" style="color: var(--danger);" onclick="logout()">
+                                <div class="setting-info">
+                                    <h4>Logout</h4>
+                                    <p>Sign out of your account</p>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- SOS Emergency Modal -->
+        <div class="modal" id="sosModal">
+            <div class="modal-content sos-modal-content">
+                <div class="sos-animation">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2>EMERGENCY SOS ACTIVATED</h2>
+                <p>Your location and help request are being sent to:</p>
+                <div class="sos-contacts" id="sosContacts">
+                    <!-- SOS contacts will be populated here -->
+                </div>
+                <div class="sos-timer">
+                    <p>Cancelling in <span id="sosCountdown">10</span> seconds...</p>
+                </div>
+                <button class="btn-danger btn-block" onclick="confirmSOS()">
+                    <i class="fas fa-paper-plane"></i> Send Now
+                </button>
+                <button class="btn-secondary btn-block" onclick="cancelSOS()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+
+        <!-- Add Contact Modal -->
+        <div class="modal" id="addContactModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add Emergency Contact</h3>
+                    <button class="btn-icon" onclick="closeModal('addContactModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-field">
+                        <label>Name</label>
+                        <input type="text" id="contactName" placeholder="Contact Name">
+                    </div>
+                    <div class="input-field">
+                        <label>Phone Number</label>
+                        <input type="tel" id="contactPhone" placeholder="+1 234 567 8900">
+                    </div>
+                    <div class="input-field">
+                        <label>Relationship</label>
+                        <select id="contactRelation">
+                            <option value="family">Family</option>
+                            <option value="friend">Friend</option>
+                            <option value="colleague">Colleague</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-field">
+                        <label>Priority</label>
+                        <select id="contactPriority">
+                            <option value="1">Primary</option>
+                            <option value="2">Secondary</option>
+                            <option value="3">Tertiary</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="closeModal('addContactModal')">Cancel</button>
+                    <button class="btn-primary" onclick="saveContact()">Save Contact</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Location Modal -->
+        <div class="modal" id="shareLocationModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Share Live Location</h3>
+                    <button class="btn-icon" onclick="closeModal('shareLocationModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Share your live location with trusted contacts for:</p>
+                    <div class="share-options">
+                        <button class="share-option" onclick="setShareDuration(15)">
+                            <i class="fas fa-clock"></i>
+                            <span>15 Minutes</span>
+                        </button>
+                        <button class="share-option" onclick="setShareDuration(30)">
+                            <i class="fas fa-clock"></i>
+                            <span>30 Minutes</span>
+                        </button>
+                        <button class="share-option" onclick="setShareDuration(60)">
+                            <i class="fas fa-clock"></i>
+                            <span>1 Hour</span>
+                        </button>
+                        <button class="share-option" onclick="setShareDuration(0)">
+                            <i class="fas fa-infinity"></i>
+                            <span>Until I Arrive</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="closeModal('shareLocationModal')">Cancel</button>
+                    <button class="btn-primary" onclick="startSharing()">
+                        <i class="fas fa-share-alt"></i> Start Sharing
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toastContainer"></div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Socket.io Client -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
